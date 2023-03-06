@@ -195,19 +195,19 @@ class SlackClient:
         """
         try:
             users = []
-            next_cursor = None
-            while True:
-                self._wait_api_call()
-                users_info = retry(lambda: self.client.users_list(
-                    cursor=next_cursor, limit=100),
-                                   exception=SlackApiError)
-                time.sleep(3)
-                users.extend(users_info['members'])
-                if users_info["response_metadata"]["next_cursor"]:
-                    next_cursor = users_info["response_metadata"][
-                        "next_cursor"]
-                else:
-                    break
+            # next_cursor = None
+            # while True:
+            #     self._wait_api_call()
+            #     users_info = retry(lambda: self.client.users_list(
+            #         cursor=next_cursor, limit=100),
+            #                        exception=SlackApiError)
+            #     time.sleep(3)
+            #     users.extend(users_info['members'])
+            #     if users_info["response_metadata"]["next_cursor"]:
+            #         next_cursor = users_info["response_metadata"][
+            #             "next_cursor"]
+            #     else:
+            #         break
             return users
         except SlackApiError as error:
             print(f"Error : {error}")
