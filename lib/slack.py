@@ -235,7 +235,7 @@ class SlackClient:
         """
         try:
             self._wait_api_call()
-            result = retry(lambda: self.client.conversations_list(
+            result = retry(lambda: self.client.users_conversations(
                 types="public_channel", exclude_archived=True, limit=1000),
                            exception=SlackApiError)
             channels_info = [
