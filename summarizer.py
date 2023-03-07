@@ -177,7 +177,6 @@ def runner():
                                summary_channel=CHANNEL_ID)
     start_time, end_time = get_time_range()
 
-    result_text = []
     for channel in slack_client.channels:
         channel_id = channel["id"]
         channel_name = channel["name"]
@@ -190,16 +189,14 @@ def runner():
         # remove emojis in messages
         messages = list(map(remove_emoji, messages))
 
-        result_text.append(f"----\n<#{channel['id']}>\n")
-        for spilitted_messages in split_messages_by_token_count(messages):
-            text = summarize("\n".join(spilitted_messages), LANGUAGE)
+        result_text = [
+            f"{start_time.strftime('%Y-%m-%d')} の #{channel_id} の様子\n"
+        ]
+        for splitted_messages in split_messages_by_token_count(messages):
+            text = summarize("\n".join(splitted_messages), LANGUAGE)
             result_text.append(text)
 
-        title = (
-            f"{start_time.strftime('%Y-%m-%d')} #{channel_name} channels summary\n\n"
-        )
-        summary_text = title + "\n".join(result_text)
-
+        summary_text = "\n".join(result_text)
         if DEBUG:
             print(summary_text)
         else:
