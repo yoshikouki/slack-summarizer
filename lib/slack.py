@@ -101,7 +101,7 @@ class SlackClient:
         messages_text = []
         for message in messages_info[::-1]:
             # Ignore bot messages and empty messages
-            if "bot_id" in message or "subtype" not in message or len(
+            if "bot_id" in message or "subtype" in message or len(
                     message["text"].strip()) == 0:
                 continue
 
