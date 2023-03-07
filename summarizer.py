@@ -194,13 +194,15 @@ def runner():
             text = summarize("\n".join(spilitted_messages), LANGUAGE)
             result_text.append(text)
 
-    title = (f"{start_time.strftime('%Y-%m-%d')} public channels summary\n\n")
+        title = (
+            f"{start_time.strftime('%Y-%m-%d')} public channels summary\n\n")
 
-    if DEBUG:
-        print("\n".join(result_text))
-    else:
-        retry(lambda: slack_client.postSummary(title + "\n".join(result_text)),
-              exception=SlackApiError)
+        if DEBUG:
+            print("\n".join(result_text))
+        else:
+            retry(lambda: slack_client.post_summary(
+                title + "\n".join(result_text), channel["id"]),
+                  exception=SlackApiError)
 
 
 if __name__ == '__main__':

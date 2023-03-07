@@ -2,6 +2,7 @@ import re
 import sys
 import time
 from datetime import datetime
+from typing import Optional
 from slack_sdk.errors import SlackApiError
 from slack_sdk import WebClient
 from lib.utils import retry, sort_by_numeric_prefix
@@ -16,7 +17,7 @@ class SlackClient:
     Example:
         ```
         client = SlackClient(SLACK_BOT_TOKEN)
-        client.postSummary(text)
+        client.post_summary(text)
         ```
     """
 
@@ -26,9 +27,10 @@ class SlackClient:
         self.channels = self._get_channels_info()
         self._summary_channel = summary_channel
 
-    def postSummary(self, text: str):
-        response = self.client.chat_postMessage(channel=self._summary_channel,
-                                                text=text)
+    def post_summary(self, text: str, channel: Optional[str] = None):
+        if channel is None:
+            channel = self._summary_channel
+        response = self.client.chat_postMessage(channel=channel, text=text)
         if not response["ok"]:
             print(f'Failed to post message: {response["error"]}')
             raise SlackApiError('Failed to post message', response["error"])
@@ -99,7 +101,8 @@ class SlackClient:
         messages_text = []
         for message in messages_info[::-1]:
             # Ignore bot messages and empty messages
-            if "bot_id" in message or "subtype" not in message or len(message["text"].strip()) == 0:
+            if "bot_id" in message or "subtype" not in message or len(
+                    message["text"].strip()) == 0:
                 continue
 
             # Get speaker name
