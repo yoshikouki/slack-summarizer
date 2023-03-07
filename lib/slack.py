@@ -96,16 +96,10 @@ class SlackClient:
                            exception=SlackApiError)
             messages_info.extend(result["messages"])
 
-        # Filter for human messages only
-        messages = list(filter(lambda m: "subtype" not in m, messages_info))
-
-        if len(messages) < 1:
-            return None
-
         messages_text = []
-        for message in messages[::-1]:
+        for message in messages_info[::-1]:
             # Ignore bot messages and empty messages
-            if "bot_id" in message or len(message["text"].strip()) == 0:
+            if "bot_id" in message or "subtype" not in message or len(message["text"].strip()) == 0:
                 continue
 
             # Get speaker name
