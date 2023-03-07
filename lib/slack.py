@@ -103,7 +103,8 @@ class SlackClient:
                 continue
 
             # Get speaker name
-            speaker_name = self.get_user_name(message["user"]) or "somebody"
+            # speaker_name = self.get_user_name(message["user"]) or "somebody"
+            speaker_name = message["user"]
 
             # Get message body fro result dict.
             body_text = message["text"].replace("\n", "\\n")
