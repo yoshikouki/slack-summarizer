@@ -2,7 +2,6 @@
 
 import re
 import time
-import emoji
 
 
 def retry(func, max_retries=5, sleep_time=10, exception=Exception):
@@ -36,12 +35,12 @@ def sort_by_numeric_prefix(lst, get_key=lambda x: x):
     Sorts the list based on whether the element has a numeric prefix.
     If an element has a numeric prefix, it is sorted in ascending order based on the numeric value.
     If an element does not have a numeric prefix, it is sorted in ascending order based on the alphabetical order of the string.
-    
+
     Args:
         lst: A list of strings
         get_key: A function that takes a string and returns a key to sort on.
                  Default is identity function that returns the string itself.
-    
+
     Returns:
         A sorted list of strings
 
@@ -59,27 +58,3 @@ def sort_by_numeric_prefix(lst, get_key=lambda x: x):
         return int(match.group(1))
 
     return sorted(digits_list, key=numkey) + sorted(string_list, key=get_key)
-
-
-def remove_emoji(text: str) -> str:
-    """
-    Remove emojis from the given text.
-
-    Args:
-        text (str): A string containing the text to remove custom emojis from.
-
-    Returns:
-        str: The input text with custom emojis removed.
-
-    Example:
-        >>> text = "Hello, world! :smile: :wave:"
-        >>> remove_custom_emoji(text)
-        'Hello, world!  '
-    """
-    # Remove Unicode emojis
-    text = emoji.replace_emoji(text, replace='')
-
-    # Remove Slack custom emojis
-    custom_pattern = r":[-_a-zA-Z0-9]+?:"
-    text = re.sub(custom_pattern, "", text)
-    return text
