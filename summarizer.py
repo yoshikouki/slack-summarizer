@@ -179,10 +179,11 @@ def runner():
 
     result_text = []
     for channel in slack_client.channels:
+        channel_id = channel["id"]
+        channel_name = channel["name"]
         if DEBUG:
-            print(channel["name"])
-        messages = slack_client.load_messages(channel["id"], start_time,
-                                              end_time)
+            print(channel_name)
+        messages = slack_client.load_messages(channel_id, start_time, end_time)
         if messages is None:
             continue
 
@@ -195,13 +196,14 @@ def runner():
             result_text.append(text)
 
         title = (
-            f"{start_time.strftime('%Y-%m-%d')} public channels summary\n\n")
+            f"{start_time.strftime('%Y-%m-%d')} #{channel_name} channels summary\n\n"
+        )
+        summary_text = title + "\n".join(result_text)
 
         if DEBUG:
-            print("\n".join(result_text))
+            print(summary_text)
         else:
-            retry(lambda: slack_client.post_summary(
-                title + "\n".join(result_text), channel["id"]),
+            retry(lambda: slack_client.post_summary(summary_text, channel_id),
                   exception=SlackApiError)
 
 
